@@ -1,0 +1,34 @@
+package edu.hm.iny.patterns.decorators.tests;
+
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Test;
+
+import edu.hm.cs.rs.arch.pattern.decorator.TextImage;
+import edu.hm.iny.patterns.decorators.ClocktimeImage;
+
+public class ClocktimeImageTest {
+
+	@Test
+	public void testSimpleClocktimeImage() {
+		final int imageSize = 3;
+		final TextImage clockPic = new ClocktimeImage(imageSize, imageSize);
+
+		final long currentShortenedTimeInSecs = System.currentTimeMillis() /1000 % 86400;
+		final int currentHourTens = (int)(currentShortenedTimeInSecs / 36000);
+		final int currentHourOnes = (int)(currentShortenedTimeInSecs / 3600 % 10);
+
+		final int currentMinutesTens = (int)(currentShortenedTimeInSecs % 3600 / 600);
+		final int currentMinutesOnes = (int)(currentShortenedTimeInSecs % 3600 / 60 % 10);
+
+		final int currentSecondsTens = (int)(currentShortenedTimeInSecs % 60 / 10 );
+		final int currentSecondsOnes = (int)(currentShortenedTimeInSecs % 10);
+
+		assertEquals(convertToChar(currentHourTens), clockPic.charAt(0, 0));
+	}
+
+	private char convertToChar(final int digit) {
+		return (char)(digit + 48);
+	}
+
+}

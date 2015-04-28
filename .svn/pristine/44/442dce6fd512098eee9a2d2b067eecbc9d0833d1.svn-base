@@ -1,0 +1,88 @@
+/**
+ * Hochschule Muenchen, Fakultaet 07 fuer Mathematik und Informatik Praktikum
+ * Software-Architektur, Sommersemester 2015 OS: Windows 7 Professional SP1 (64
+ * Bit); Java-Version: 1.8.0_05 CPU: Intel Core2Duo T7300 @ 2.0 GHz, 4GB RAM
+ * Aufgabe 3: Decorator-Pattern
+ */
+
+package edu.hm.iny.patterns.decorators;
+
+import java.util.NoSuchElementException;
+
+import edu.hm.cs.rs.arch.pattern.decorator.TextImage;
+
+/**
+ * Die Klasse ClocktimeImage liefert ein Bild mit gegebener Anzahl Spalten und Zeilen,
+ * auf dem die jeweils aktuelle Uhrzeit im Format HHMMSS zu sehen ist.
+ * Die sechs Ziffern wiederholen sich nach rechts und nach unten bis zur Bildgröße.
+ * @author Stephanie Ehrenberg (sehrenbe@hm.edu)
+ * @version 2015-04-17
+ */
+public class ClocktimeImage implements TextImage {
+
+	/** */
+	private final int imageWidth;
+	/** */
+	private final int imageHeight;
+
+	/**
+	 * Ctor.
+	 * @param width
+	 * @param height
+	 */
+	public ClocktimeImage(final int width, final int height) {
+		imageWidth = width;
+		imageHeight = height;
+	}
+
+	@Override
+	public int getWidth() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+		//return 0;
+	}
+
+	@Override
+	public int getHeight() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException();
+		//return 0;
+	}
+
+	@Override
+	public char charAt(final int column, final int row) {
+
+		checkIfCoordinatesWithinPicture(column, row);
+
+		// careful - this sort of represents the time in UTC!
+		final long currentTimeInSecs = System.currentTimeMillis() / 1000 % 86400;
+
+		final int hours = (int)(currentTimeInSecs/3600);
+		final int minutes = (int)(currentTimeInSecs%3600/60);
+		final int seconds = (int)(currentTimeInSecs%60);
+
+		// TODO nur für Testzwecke, abändern!
+		return ' ';
+	}
+
+	/**
+	 * Checks if the stated coordinates lie within the picture. Throws an Exception
+	 * if the coordinates are not valid.
+	 * @param column The image's column.
+	 * @param row The image's row.
+	 * @return True, if coordinates are valid.
+	 * @throws NoSuchElementException If coordinates are outside the picture range.
+	 */
+	private boolean checkIfCoordinatesWithinPicture(final int column, final int row) {
+		final boolean outsidePicture = column >= imageWidth || row >= imageHeight;
+		if(outsidePicture)
+			throw new NoSuchElementException(
+					"Invalid coordinates. No element at "
+							+ row
+							+ "/"
+							+ column
+							+ " (row/column)");
+
+		return !outsidePicture;
+	}
+}
