@@ -29,6 +29,29 @@ public abstract class TextImageBaseDecorator implements TextImage {
 	}
 
 	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(final Object object) {
+
+		if (this == object)
+			return true;
+		if (object == null)
+			return false;
+		if (!(object instanceof TextImageBaseDecorator))
+			return false;
+		final TextImageBaseDecorator other = (TextImageBaseDecorator) object;
+		if (textImage == null) {
+			if (other.textImage != null)
+				return false;
+		} else if (!textImage.equals(other.textImage))
+			return false;
+		return true;
+	}
+
+
+
+	/* (non-Javadoc)
 	 * @see edu.hm.cs.rs.arch.pattern.decorator.TextImage#getWidth()
 	 */
 	@Override

@@ -9,6 +9,7 @@ import edu.hm.iny.patterns.decorators.ClocktimeImage;
 import edu.hm.iny.patterns.decorators.Modern;
 import edu.hm.iny.patterns.decorators.StringPicture;
 import edu.hm.iny.patterns.factory.SwitchedTextImageFactory;
+import edu.hm.iny.patterns.factory.TextImageFactory;
 
 public class TestSwitchedTextImageFactory {
 
@@ -26,12 +27,41 @@ public class TestSwitchedTextImageFactory {
 	}
 
 	@Test
-	public void simpleTest() {
+	public void getSwitchedTextImageFactoryFromLocate() throws ClassNotFoundException {
+		System.setProperty("factorytype", "SwitchedTextImageFactory");
+		assertEquals(SwitchedTextImageFactory.class, TextImageFactory.locate().getClass());
+	}
+
+	@Test
+	public void simplePositiveTest() throws ClassNotFoundException {
+		TextImageFactory.locate();
+
 		assertEquals(StringPicture.class,
 				swFactory.make("StringPicture", pictureStrings).getClass());
 		assertEquals(Modern.class,
 				swFactory.make("Modern", "&", "3", "5").getClass());
 		assertEquals(ClocktimeImage.class,
 				swFactory.make("ClocktimeImage", "3", "5").getClass());
+	}
+
+
+	@Test (expected = ClassNotFoundException.class)
+	public void unsupportedImageTypeTest() throws ClassNotFoundException {
+		swFactory.make("BlaPic", "&", "3", "1");
+	}
+
+
+	@Test(expected = IllegalArgumentException.class)
+	public void tooManyArgumentsTest() throws ClassNotFoundException {
+
+		swFactory.make("Modern", "&", "3", "1", "2");
+		swFactory.make("ClocktimeImage", "3", "5", "3");
+	}
+
+
+	@Test(expected = IllegalArgumentException.class)
+	public void wrongArgumentsTest() throws ClassNotFoundException {
+		swFactory.make("Modern", "bla", "3", "1");
+		swFactory.make("ClocktimeImage", "3", "b");
 	}
 }
